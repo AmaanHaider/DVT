@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { Box, CircularProgress } from "@chakra-ui/react";
+import { Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import { auth } from "./config/login";
+import { useAuthState } from "react-firebase-hooks/auth";
+import LoginPage from "./pages/LoginPage";
+
 
 function App() {
+
+  const [user, loading] = useAuthState(auth);
+
+  if (loading) {
+    return (
+      <Box mt={50} textAlign="center">
+        <CircularProgress />
+      </Box>
+    )
+  }
+  if (!user) {
+    return <LoginPage />
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+
+      <Route path="/" element={  <Home />}/>
+    </Routes>
+  
   );
 }
 
